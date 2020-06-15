@@ -1,13 +1,13 @@
 from django.shortcuts import render, Http404
 from django.http import HttpResponse, JsonResponse
-
+import random 
 from .models import Tweets
 
 # Create your views here.
 
 
 def home_view(request, *args, **kwargs):
-    return render(request, "tweets/home.html")
+    return render(request, "main/home.html")
 
 def tweet_detail_view(request, tweet_id, *arg, **kwargs):
     data = {
@@ -31,8 +31,9 @@ def tweet_list_view(request, *args, **kwargs):
         RETURNS JSON DATA
     """
     tweet_qs = Tweets.objects.all()
-    tweet_list = [{ "id": tweet.id, "content": tweet.content } for tweet in tweet_qs]
+    tweet_list = [{ "id": tweet.id, "content": tweet.content, "likes": random.randint(0, 1000) } for tweet in tweet_qs]
     data = {
+        "isUser": False,
         "response": tweet_list
     }
 

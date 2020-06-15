@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.pythonPath": "/Users/atulyashetty/.virtualenvs/django_twitter/bin/python"
+	}
+}

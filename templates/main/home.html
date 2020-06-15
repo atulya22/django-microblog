@@ -82,6 +82,12 @@
                     alert("An error occured.")
                 }
 
+            } else if (xhr.status === 401) {
+
+                //TODO: Handle Error using handleTweetFormError
+                alert("Please login")
+                window.location.href = "/login"
+
             } else if (xhr.status === 500) {
                 alert("There was a server error, please try again.")
             }

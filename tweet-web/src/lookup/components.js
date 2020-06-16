@@ -31,18 +31,15 @@ function lookup(method, endpoint, callback, data) {
   if (csrftoken && method === 'POST') {
     console.log("Has token")
     // xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
-    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
-    xhr.setRequestHeader("X-CSRFTOKEN", csrftoken)
+    // xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    // xhr.setRequestHeader("X-CSRFTOKEN", csrftoken)
 
   }
   xhr.onload = function() {
     console.log("Lookup")
-    console.log(xhr.response)
-    console.log(xhr.status)
     callback(xhr.response, xhr.status)
   }
   xhr.onerror = function(e) {
-    console.log(e)
     callback({"message": "There was an error"}, 400)
   }
   xhr.send(jsonData)

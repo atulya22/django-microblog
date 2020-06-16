@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {loadTweets} from '../lookup'
+import {loadTweets, createTweet} from '../lookup'
 
 export function TweetsComponents(props) {
 
@@ -14,11 +14,16 @@ export function TweetsComponents(props) {
         console.log(textAreaRef.current.value)
         const newVal = textAreaRef.current.value 
         let tempNewTweets = [...newTweets]
-        tempNewTweets.unshift({
-            content: newVal,
-            likes:0,
-            id:newVal.id
+        createTweet(newVal, (response, status) => {
+          if (status === 201) {
+            tempNewTweets.unshift(response)
+          } else {
+            console.log(response)
+            alert("An error occured")
+          }
+       
         })
+  
         setNewTweets(tempNewTweets)
         textAreaRef.current.value = ''
     }
@@ -86,6 +91,7 @@ export function ActionBTN(props) {
  export function TweetsList(props) {
     const [tweetsInit, setTweetsInit] = useState([])
     const [tweets, setTweets] = useState([])
+    const [tweetsDidSet, setTweetsDidSet] = useState(false)
 
     console.log(props.newTweets)
 
@@ -95,20 +101,22 @@ export function ActionBTN(props) {
             setTweets(final)
         }
 
-
     }, [props.newTweets, tweets, tweetsInit])
   
     useEffect(() => {
       //perform lookup
-      const myCallBack  = (response, status) => {
-        if (status === 200) {
-            setTweetsInit(response)
-        } else{
-          alert("There was an error")
+      if (tweetsDidSet === false) {
+        const myCallBack  = (response, status) => {
+          if (status === 200) {
+              setTweetsInit(response)
+              setTweetsDidSet(true)
+          } else{
+            alert("There was an error")
+          }
         }
-      }
-      loadTweets(myCallBack)
-    }, [])
+        loadTweets(myCallBack)
+    }
+    }, [tweetsInit, tweetsDidSet, setTweetsDidSet])
   
     return tweets.map((item, index)=>  {
       return <Tweet tweet={item} className="my-5 py-5 border bg-white text-dark" key={`${index}--{item.id}`}/>

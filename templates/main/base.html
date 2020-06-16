@@ -5,15 +5,18 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no"/>
+    <meta name="theme-color" content="#000000"/>
+
+    {% include 'react/css.html' %}
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     {% block head_title %}
     <title>Tweet Me</title>
     {% endblock head_title %}
 
     <!-- Bootstrap -->
-    <link href="{% static 'tweets/css/bootstrap.min.css' %}" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {% include 'react/css.html' %}
     <style>
       .bg-tweether {
         background-color: darkgreen;
@@ -34,10 +37,8 @@
       {% endblock content %}
     </div>
 
+    {% include 'react/base_embed.html' %}
+    {% include 'react/js.html' %}
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static 'tweets/js/bootstrap.min.js' %}"></script>
   </body>
 </html>

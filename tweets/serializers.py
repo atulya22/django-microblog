@@ -5,6 +5,7 @@ from .models import Tweets
 
 MAX_TWEET_LENGTH = settings.MAX_TWEET_LENGTH
 
+
 class TweetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tweets
@@ -12,5 +13,6 @@ class TweetSerializer(serializers.ModelSerializer):
 
     def validate_content(self, value):
         if len(value) > MAX_TWEET_LENGTH:
-            raise serializers.ValidationError("Tweet exceeds max character limit of 240")
+            raise serializers.ValidationError("Tweet exceeds max character \
+                limit of 240")
         return value

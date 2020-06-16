@@ -71,6 +71,7 @@ def tweet_delete_view(request, tweet_id, *args, **kwargs):
     obj.delete()
     return Response({"message": "Tweet was deleted"}, status=200)
 
+
 def tweet_create_view_pure_django(request, *args, **kwargs):
     print("Ajax request", request.is_ajax())
 

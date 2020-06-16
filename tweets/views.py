@@ -6,10 +6,14 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 # DRF
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import (api_view,
+                                       permission_classes,
+                                       authentication_classes)
+from rest_framework.permissions import IsAuthenticated
 
 # General Python
-import random 
+import random
 
 # Internal
 from .serializers import TweetSerializer
@@ -24,12 +28,15 @@ def home_view(request, *args, **kwargs):
 
 
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def tweet_create_view(request, *args, **kwargs):
     serializer = TweetSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)
     return Response({}, status=400)
+
 
 @api_view(['GET'])
 def tweet_list_view(request, *args, **kwargs):
@@ -47,6 +54,7 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
     serializer = TweetSerializer(obj)
     return Response(serializer.data)
 
+
 def tweet_create_view_pure_django(request, *args, **kwargs):
     print("Ajax request", request.is_ajax())
 
@@ -63,7 +71,8 @@ def tweet_create_view_pure_django(request, *args, **kwargs):
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201)
-        if next_url is not None and is_safe_url(next_url, allowed_hosts=ALLOWED_HOSTS):
+        if next_url is not None and is_safe_url(next_url,
+                                                allowed_hosts=ALLOWED_HOSTS):
             return redirect(next_url)
         form = TweetForm()
 
@@ -86,7 +95,7 @@ def tweet_detail_view_pure_django(request, tweet_id, *arg, **kwargs):
         data['message'] = "Tweet not found"
         status = 404
 
-    return JsonResponse(data, status= status)
+    return JsonResponse(data, status=status)
 
 
 def tweet_list_view_pure_django(request, *args, **kwargs):

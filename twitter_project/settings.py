@@ -152,7 +152,7 @@ if DEBUG:
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
     DEFAULT_AUTHENTICATION_CLASSES += [
-        'twitter_project.rest_api.dev.DevAuthentication'
+        # 'twitter_project.rest_api.dev.DevAuthentication'
     ]
 REST_FRAMEWORK = {
     

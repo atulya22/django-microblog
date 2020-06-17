@@ -9,7 +9,14 @@ export const apiTweetAction = function(tweetId, action, callback) {
     backendLookup('POST', '/tweets/action/', callback, data)   
 }
   
-export const apiTweetList = function(callback) {
-    backendLookup('GET', '/tweets/', callback)  
+export const apiTweetList = function(username, callback) {
+    let endpoint = "/tweets"
+    if (username) {
+        endpoint = `/tweets/?username=${username}`
+    }
+    backendLookup('GET', endpoint, callback)  
 }
 
+export const apiTweetDetail = function(tweet_id, callback) {
+    backendLookup('GET', `/tweets/${tweet_id}`, callback)  
+}

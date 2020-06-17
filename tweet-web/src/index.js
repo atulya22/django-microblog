@@ -16,13 +16,12 @@ if (appEl) {
   );
 }
 
+const e = React.createElement
+
 const tweetEl= document.getElementById('tweetme')
 
 if (tweetEl) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <TweetsComponents />
-    </React.StrictMode>,
+  ReactDOM.render(e(TweetsComponents, tweetEl.dataset),
     tweetEl
   );
 }

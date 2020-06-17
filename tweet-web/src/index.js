@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {TweetsComponents} from './tweets'
+import {TweetsComponents, TweetDetailComponent} from './tweets'
 import * as serviceWorker from './serviceWorker';
 
 const appEl = document.getElementById('root')
@@ -27,6 +27,15 @@ if (tweetEl) {
 }
 
 
+const tweetDetailElements = document.querySelectorAll('.tweetme-detail')
+
+if (tweetDetailElements) {
+
+}
+
+tweetDetailElements.forEach(container => {
+  ReactDOM.render(e(TweetDetailComponent, container.dataset), container );
+})
 
 
 // If you want your app to work offline and load faster, you can change

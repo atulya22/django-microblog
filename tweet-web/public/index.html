@@ -48,6 +48,7 @@
       var path = window.location.pathname
       var idRegex = /(?<tweetid>\d+)/
       var match = path.match(idRegex)
+      
       if (match) {
         var tweetid = match.groups.tweetid
         var tweetmeElement = document.getElementById("tweetme")

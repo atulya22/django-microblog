@@ -16,7 +16,12 @@ from rest_framework.permissions import IsAuthenticated
 import random
 
 # Internal
-from .serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
+from .serializers import (
+    TweetSerializer,
+    TweetActionSerializer,
+    TweetCreateSerializer
+)
+
 from .models import Tweets
 from .forms import TweetForm
 
@@ -30,7 +35,7 @@ def home_view(request, *args, **kwargs):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def tweet_create_view(request, *args, **kwargs):
-    serializer = TweetCreateSerializer(data=request.POST)
+    serializer = TweetCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {loadTweets, createTweet} from '../lookup'
+import {apiTweetList, apiTweetCreate} from './lookup'
 
 export function TweetsComponents(props) {
 
@@ -8,23 +8,24 @@ export function TweetsComponents(props) {
 
     const [newTweets, setNewTweets] = useState([])
 
+    const handleServerResponse = (response, status) => {
+      // Service response handler
+      let tempNewTweets = [...newTweets]
+      if (status === 201) {
+        tempNewTweets.unshift(response)
+        setNewTweets(tempNewTweets)
+      } else {
+        console.log(response)
+        alert("An error occured")
+      }
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault()
-        console.log(event)
-        console.log(textAreaRef.current.value)
         const newVal = textAreaRef.current.value 
-        let tempNewTweets = [...newTweets]
-        createTweet(newVal, (response, status) => {
-          if (status === 201) {
-            tempNewTweets.unshift(response)
-          } else {
-            console.log(response)
-            alert("An error occured")
-          }
-       
-        })
+        // Perform backend request
+        apiTweetCreate(newVal, handleServerResponse)
   
-        setNewTweets(tempNewTweets)
         textAreaRef.current.value = ''
     }
 
@@ -49,7 +50,6 @@ export function ActionBTN(props) {
     const actionDisplay = action.display ? action.display : 'Action'
     const handleClick = (event) => {
         event.preventDefault()
-        console.log("Here")
         console.log(action.type)
         if(action.type === 'like') {
             if(userLike === true) {
@@ -93,8 +93,6 @@ export function ActionBTN(props) {
     const [tweets, setTweets] = useState([])
     const [tweetsDidSet, setTweetsDidSet] = useState(false)
 
-    console.log(props.newTweets)
-
     useEffect(()=>{
         let final = [...props.newTweets].concat(tweetsInit)
         if (final.length !== tweets.length){
@@ -106,7 +104,7 @@ export function ActionBTN(props) {
     useEffect(() => {
       //perform lookup
       if (tweetsDidSet === false) {
-        const myCallBack  = (response, status) => {
+        const handleTweetListResponse  = (response, status) => {
           if (status === 200) {
               setTweetsInit(response)
               setTweetsDidSet(true)
@@ -114,7 +112,7 @@ export function ActionBTN(props) {
             alert("There was an error")
           }
         }
-        loadTweets(myCallBack)
+        apiTweetList(handleTweetListResponse)
     }
     }, [tweetsInit, tweetsDidSet, setTweetsDidSet])
   

@@ -117,35 +117,6 @@
 
     var tweetsContainerElement = document.getElementById("tweets")
 
-
-    const loadTweets = function(tweetsElement) {
-        const method = 'GET'
-        const url = "/tweets"
-        const responseType = 'json'
-        const xhr = new XMLHttpRequest()
-        xhr.responseType = responseType
-        xhr.open(method, url)
-        xhr.onload = function() {
-            const serverResponse = xhr.response
-            const listedItems = serverResponse
-            var finalTweetStr = ""
-            var i;
-
-            for (i=0; i<listedItems.length; i++) {
-                var tweetObj = listedItems[i]
-                var currentItem = formatTweeetElement(tweetObj)
-                finalTweetStr += currentItem
-            }
-
-            tweetsElement.innerHTML = finalTweetStr
-
-        }
-        xhr.send()
-
-    }
-
-    loadTweets(tweetsContainerElement)
-
     function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -185,7 +156,6 @@
 
         xhr.onload = function() {
             console.log(xhr.status, xhr.response)
-            loadTweets(tweetsContainerElement)
         }
 
         xhr.send(data)

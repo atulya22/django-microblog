@@ -1,5 +1,14 @@
 import {backendLookup} from '../lookup'
 
+
+export const apiTweetFeed = function (callback, nextUrl) {
+    let endpoint = "/tweets/feed/"
+    if (nextUrl != null && nextUrl !== undefined) {
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
+    }
+    backendLookup('GET', endpoint, callback) 
+} 
+
 export const apiTweetCreate = function (newTweet, callback) {
     backendLookup("POST", "/tweets/create/", callback, {content: newTweet})
   }

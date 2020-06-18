@@ -23,6 +23,7 @@ from django.views.generic import TemplateView
 from tweets.views import (
     tweets_list_view,
     tweets_detail_view,
+    home_view
 )
 
 from accounts.views import (
@@ -33,7 +34,8 @@ from accounts.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', tweets_list_view),
+    path('', home_view),
+    path('global', tweets_list_view),
     path('login/', login_view),
     path('logout/', logout_view),
     path('register/', register_view),

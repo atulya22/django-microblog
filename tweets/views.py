@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 def home_view(request, *args, **kwargs):
-    return render(request, "main/home.html")
+    return render(request, "main/feed.html")
 
 
 def tweets_list_view(request, *args, **kwargs):

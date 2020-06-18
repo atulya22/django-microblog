@@ -12,6 +12,7 @@ from rest_framework.decorators import (api_view,
                                        authentication_classes)
 from rest_framework.permissions import IsAuthenticated
 
+from ..serializers import PublicProfileSerializer
 # General Python
 
 from django.contrib.auth import get_user_model
@@ -25,6 +26,8 @@ ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def user_follow_view(request, username, *args, **kwargs):
+    print("Calling follow")
+
     me = request.user
     other_user_qs = User.objects.filter(username=username)
 
@@ -49,3 +52,16 @@ def user_follow_view(request, username, *args, **kwargs):
     current_followers_qs = profile.followers.all()
 
     return Response({"count": current_followers_qs.count()}, status=200)
+
+
+@api_view(['GET'])
+def profile_detail_api_view(request,  username, *args, **kwargs):
+    print("Calling detail")
+    print(username)
+    qs = Profile.objects.filter(user__username=username)
+    if not qs.exists():
+        return Reponse({"detail": "User not found"}, status=404)
+    profile_obj = qs.first()
+    serializer = PublicProfileSerializer(instance=profile_obj, context={"request":request})
+ 
+    return Response(serializer.data, status=200)

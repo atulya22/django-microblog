@@ -9,10 +9,13 @@ export const apiTweetAction = function(tweetId, action, callback) {
     backendLookup('POST', '/tweets/action/', callback, data)   
 }
   
-export const apiTweetList = function(username, callback) {
+export const apiTweetList = function(username, callback, nextUrl) {
     let endpoint = "/tweets"
     if (username) {
         endpoint = `/tweets/?username=${username}`
+    }
+    if (nextUrl != null && nextUrl !== undefined) {
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
     }
     backendLookup('GET', endpoint, callback)  
 }

@@ -5,6 +5,7 @@ from django.utils.http import is_safe_url
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 # DRF
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import (api_view,
@@ -42,9 +43,8 @@ def tweet_list_view(request, *args, **kwargs):
     qs = Tweets.objects.all()
     username = request.GET.get('username')
     if username is not None:
-        qs = qs.filter(user__username__iexact=username)
-    serializer = TweetSerializer(qs, many=True)
-    return Response(serializer.data)
+        qs = qs.by_username(username=username)
+    return get_paginated_queryset_response(qs, request)
 
 
 @api_view(['GET'])
@@ -103,8 +103,27 @@ def tweet_action_view(request, *args, **kwargs):
             serializer = TweetSerializer(obj)
             return Response(serializer.data, status=200)
         elif action == 'retweet':
-            new_tweet = Tweets.objects.create(user=request.user, content=content, parent=obj)
+            new_tweet = Tweets.objects.create(user=request.user,
+                                              content=content, parent=obj)
             serializer = TweetSerializer(new_tweet)
             return Response(serializer.data, status=201)
 
     return Response({}, status=200)
+
+
+def get_paginated_queryset_response(qs, request):
+    paginator = PageNumberPagination()
+    paginator.page_size = 20
+    paginated_qs = paginator.paginate_queryset(qs, request)
+    serializer = TweetSerializer(paginated_qs, many=True)
+    return paginator.get_paginated_response(serializer.data)
+
+
+
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def tweet_feed_view(request, *args, **kwargs):
+    user = request.user
+    qs = Tweets.objects.feed(user)
+    return get_paginated_queryset_response(qs, request)
+

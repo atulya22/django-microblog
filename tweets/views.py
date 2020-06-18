@@ -13,6 +13,7 @@ def home_view(request, *args, **kwargs):
 def tweets_list_view(request, *args, **kwargs):
     return render(request, "tweets/list.html")
 
+
 def tweets_detail_view(request, tweet_id, *args, **kwargs):
     return render(request, "tweets/detail.html",
                   context={"tweet_id": tweet_id})

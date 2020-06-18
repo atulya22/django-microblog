@@ -11,13 +11,15 @@ User = get_user_model()
 
 class ProfileTestCases(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.userb = User.objects.create_user(username='testuserb', password='testpassword')
+        self.user = User.objects.create_user(username='testuser',
+                                             password='testpassword')
+        self.userb = User.objects.create_user(username='testuserb',
+                                              password='testpassword')
 
     def get_client(self):
         client = APIClient()
         client.login(username=self.user.username, password="testpassword")
-        return client    
+        return client
 
     def test_profile_created(self):
         qs = Profile.objects.all()
@@ -49,7 +51,6 @@ class ProfileTestCases(TestCase):
         first = self.user
         second = self.userb
         first.profile.followers.add(second)
-        
         client = self.get_client()
         response = client.post(f"/api/profile/{self.userb.username}/follow/",
                                {"action": "unfollow"})
@@ -57,4 +58,13 @@ class ProfileTestCases(TestCase):
         r_data = response.json()
         count = r_data.get('count')
 
+        self.assertEqual(count, 0)
+
+    def test_cannnot_follow_api_endpoint(self):
+        client = self.get_client()
+        response = client.post(f"/api/profile/{self.user.username}/follow/",
+                               {"action": "follow"})
+
+        r_data = response.json()
+        count = r_data.get('count')
         self.assertEqual(count, 0)

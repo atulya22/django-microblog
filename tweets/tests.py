@@ -12,21 +12,22 @@ User = get_user_model()
 
 class TweetTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.userb = User.objects.create_user(username='testuserb', password='testpassword')
+        self.user = User.objects.create_user(username='testuser',
+                                             password='testpassword')
+        self.userb = User.objects.create_user(username='testuserb',
+                                              password='testpassword')
 
         Tweets.objects.create(content="First tweet", user=self.user)
         Tweets.objects.create(content="Second tweet", user=self.user)
         Tweets.objects.create(content="Third tweet", user=self.userb)
         self.current_count = Tweets.objects.all().count()
 
-
     def test_user_created(self):
         self.assertEqual(self.user.username, 'testuser')
 
     def test_tweet_created(self):
         tweet_obj = Tweets.objects.create(content="Test tweet", user=self.user)
-        self.assertEqual(tweet_obj.id, 4) 
+        self.assertEqual(tweet_obj.id, 4)
         self.assertEqual(tweet_obj.user, self.user)
 
     def get_client(self):
@@ -42,7 +43,8 @@ class TweetTestCase(TestCase):
 
     def test_action_like(self):
         client = self.get_client()
-        response = client.post("/api/tweets/action/", {"id": 1, "action": "like"})
+        response = client.post("/api/tweets/action/",
+                               {"id": 1, "action": "like"})
         self.assertEqual(response.status_code, 200)
         like_count = response.json().get("likes")
         self.assertEqual(like_count, 1)
@@ -55,24 +57,25 @@ class TweetTestCase(TestCase):
 
     def test_action_unlike(self):
         client = self.get_client()
-        response = client.post("/api/tweets/action/", {"id": 2, "action": "like"})
+        response = client.post("/api/tweets/action/",
+                               {"id": 2, "action": "like"})
         self.assertEqual(response.status_code, 200)
-        response = client.post("/api/tweets/action/", {"id": 2, "action": "unlike"})
+        response = client.post("/api/tweets/action/",
+                               {"id": 2, "action": "unlike"})
         self.assertEqual(response.status_code, 200)
         like_count = response.json().get("likes")
         self.assertEqual(like_count, 0)
 
-    
     def test_action_retweet(self):
         client = self.get_client()
         current_count = self.current_count
-        response = client.post("/api/tweets/action/", {"id": 2, "action": "retweet"})
+        response = client.post("/api/tweets/action/",
+                               {"id": 2, "action": "retweet"})
         self.assertEqual(response.status_code, 201)
         data = response.json()
         new_tweet_id = data.get("id")
         self.assertNotEqual(2, new_tweet_id)
         self.assertEqual(current_count + 1, new_tweet_id)
-
 
     def test_tweet_create_api_view(self):
         request_data = {"content": "My test tweet"}
@@ -90,7 +93,7 @@ class TweetTestCase(TestCase):
         data = response.json()
         tweet_id = data.get("id")
         self.assertEqual(tweet_id, 1)
-    
+
     def test_tweet_delete_api_view(self):
         client = self.get_client()
         response = client.delete("/api/tweets/1/delete/")
@@ -104,4 +107,3 @@ class TweetTestCase(TestCase):
     def test_tweets_related_name(self):
         user = self.user
         self.assertEqual(user.tweets.count(), 2)
-

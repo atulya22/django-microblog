@@ -31,8 +31,6 @@ LOGIN_URL = "/login"
 MAX_TWEET_LENGTH = 240
 TWEET_ACTION_OPTIONS = ['like', 'unlike', 'retweet']
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -157,7 +155,7 @@ if DEBUG:
         # 'twitter_project.rest_api.dev.DevAuthentication'
     ]
 REST_FRAMEWORK = {
-    
+
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
 }

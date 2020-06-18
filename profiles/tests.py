@@ -1,5 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+
+from rest_framework.test import APIClient
+
 # Create your tests here.
 from .models import Profile
 
@@ -10,6 +13,11 @@ class ProfileTestCases(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.userb = User.objects.create_user(username='testuserb', password='testpassword')
+
+    def get_client(self):
+        client = APIClient()
+        client.login(username=self.user.username, password="testpassword")
+        return client    
 
     def test_profile_created(self):
         qs = Profile.objects.all()
@@ -28,3 +36,25 @@ class ProfileTestCases(TestCase):
         first_user_following_no_one = first.following.all()
         self.assertFalse(first_user_following_no_one.exists())
 
+    def test_follow_api_endpoint(self):
+        client = self.get_client()
+        response = client.post(f"/api/profile/{self.userb.username}/follow/",
+                               {"action": "follow"})
+
+        r_data = response.json()
+        count = r_data.get('count')
+        self.assertEqual(count, 1)
+
+    def test_unfollow_api_endpoint(self):
+        first = self.user
+        second = self.userb
+        first.profile.followers.add(second)
+        
+        client = self.get_client()
+        response = client.post(f"/api/profile/{self.userb.username}/follow/",
+                               {"action": "unfollow"})
+
+        r_data = response.json()
+        count = r_data.get('count')
+
+        self.assertEqual(count, 0)

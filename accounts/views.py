@@ -22,7 +22,7 @@ def login_view(request, *args, **kwargs):
 def logout_view(request, *args, **kwargs):
     if request.method == 'POST':
         logout(request)
-        return redirect('/login')
+        return redirect('/login/')
 
     context = {
         "form": None,

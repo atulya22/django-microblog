@@ -13,10 +13,10 @@ class TweetLike(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
-class Tweets(models.Model): 
+class Tweets(models.Model):
 
     parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tweets")
     content = models.TextField(blank=True, null=True)
     likes = models.ManyToManyField(User, related_name='tweet_user', blank=True,
                                    through=TweetLike)
@@ -25,7 +25,7 @@ class Tweets(models.Model):
 
     class Meta:
         ordering = ['-id']
-    
+
     @property
     def is_retweet(self):
         return self.parent is not None

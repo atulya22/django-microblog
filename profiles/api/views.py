@@ -23,37 +23,37 @@ User = get_user_model()
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def user_follow_view(request, username, *args, **kwargs):
-    print("Calling follow")
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def user_follow_view(request, username, *args, **kwargs):
+#     print("Calling follow")
 
-    me = request.user
-    other_user_qs = User.objects.filter(username=username)
+#     me = request.user
+#     other_user_qs = User.objects.filter(username=username)
 
-    if me.username == username:
-        my_followers = me.profile.followers.all()
-        return Response({"count": my_followers.count()}, status=200)
+#     if me.username == username:
+#         my_followers = me.profile.followers.all()
+#         return Response({"count": my_followers.count()}, status=200)
 
-    if not other_user_qs.exists():
-        return Response({}, status=404)
-    other = other_user_qs.first()
-    profile = other.profile
-    data = request.data or {}
+#     if not other_user_qs.exists():
+#         return Response({}, status=404)
+#     other = other_user_qs.first()
+#     profile = other.profile
 
-    action = data.get('action')
-    if action == 'follow':
-        profile.followers.add(me)
-    elif action == 'unfollow':
-        profile.followers.remove(me)
-    else:
-        pass
+#     action = data.get('action')
+#     if action == 'follow':
+#         profile.followers.add(me)
+#     elif action == 'unfollow':
+#         profile.followers.remove(me)
+#     else:
+#         pass
 
-    serializer = PublicProfileSerializer(instance=profile, context={"request":request})
-    return Response(serializer.data, status=200)
+#     serializer = PublicProfileSerializer(instance=profile, context={"request":request})
+
+#     return Response(serializer.data, status=200)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def profile_detail_api_view(request,  username, *args, **kwargs):
     print("Calling detail")
     print(username)
@@ -61,6 +61,16 @@ def profile_detail_api_view(request,  username, *args, **kwargs):
     if not qs.exists():
         return Reponse({"detail": "User not found"}, status=404)
     profile_obj = qs.first()
-    serializer = PublicProfileSerializer(instance=profile_obj, context={"request":request})
- 
+    data = request.data or {}
+    me = request.user
+
+    if (request.method == "POST" and profile_obj.user != me):
+        action = data.get('action')
+        if action == 'follow':
+            profile_obj.followers.add(me)
+        elif action == 'unfollow':
+            profile_obj.followers.remove(me)
+        else:
+            pass
+    serializer = PublicProfileSerializer(instance=profile_obj, context={"request": request})
     return Response(serializer.data, status=200)

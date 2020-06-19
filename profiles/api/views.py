@@ -49,9 +49,8 @@ def user_follow_view(request, username, *args, **kwargs):
     else:
         pass
 
-    current_followers_qs = profile.followers.all()
-
-    return Response({"count": current_followers_qs.count()}, status=200)
+    serializer = PublicProfileSerializer(instance=profile, context={"request":request})
+    return Response(serializer.data, status=200)
 
 
 @api_view(['GET'])

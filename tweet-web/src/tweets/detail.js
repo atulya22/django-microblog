@@ -19,7 +19,7 @@ export function ParentTweet(props) {
     className = isRetweet === true ? `${className} p-2 border rounded` : className
     const likeAction = {type: "like", display:"Likes"}
     const unlikeAction = {type: "unlike", display:"Unlikes"}
-    const retweetAction = {type: "retweet", display:"Retweet"}
+    const retweetAction = {type: "retweet", display:"Repost"}
 
     const path = window.location.pathname
     var idRegex = /(?<tweetid>\d+)/

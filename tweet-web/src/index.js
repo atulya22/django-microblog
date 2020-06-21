@@ -5,6 +5,7 @@ import App from './App';
 import {FeedComponents, TweetsComponents, TweetDetailComponent} from './tweets'
 import * as serviceWorker from './serviceWorker';
 import {ProfileBadgeComponent} from './profiles'
+
 const appEl = document.getElementById('root')
 
 if (appEl) {

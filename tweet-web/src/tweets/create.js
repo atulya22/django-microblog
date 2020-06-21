@@ -1,5 +1,6 @@
 import React from 'react'
 import {apiTweetCreate} from './lookup'
+import { createPortal } from 'react-dom'
 
 export function TweetCreate(props) {
   const textAreaRef = React.createRef()
@@ -9,9 +10,11 @@ export function TweetCreate(props) {
       // Service response handler
       if (status === 201) {
         didTweet(response)
-      } else {
+      } else if (status === 403){
         console.log(response)
-        alert("An error occured")
+        alert("Please login to post a message")
+      } else {
+        alert("An error has occured")
       }
     }
 

@@ -6,6 +6,9 @@ export const apiTweetFeed = function (callback, nextUrl) {
     if (nextUrl != null && nextUrl !== undefined) {
         endpoint = nextUrl.replace("http://localhost:8000/api", "")
     }
+    
+    console.log(endpoint)
+
     backendLookup('GET', endpoint, callback) 
 } 
 

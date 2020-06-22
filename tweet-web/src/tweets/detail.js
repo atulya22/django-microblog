@@ -46,7 +46,7 @@ export function ParentTweet(props) {
     }
 
     return <div className = {className}>
-      {isRetweet === true && <div className="mb-2"> <span className="small text-muted">Retweet by <UserDisplay user={retweeter}/></span></div>}
+      {isRetweet === true && <div className="mb-2"> <span className="small text-muted">Repost by <UserDisplay user={retweeter}/></span></div>}
       <div className="d-flex">
         <div className="">
         <UserPicture user={tweet.user}/>

@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tuly-microblog.herokuapp.com']
+ALLOWED_HOSTS = ['localhost']
 
 LOGIN_URL = "/login"
 MAX_TWEET_LENGTH = 240

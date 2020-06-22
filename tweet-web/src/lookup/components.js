@@ -20,7 +20,7 @@ export function backendLookup(method, endpoint, callback, data) {
   if (data){
     jsonData = JSON.stringify(data)
   }
-  const url = `https://tuly-microblog.herokuapp.com/api${endpoint}`
+  const url = `http://localhost:8000/api${endpoint}`
   const xhr = new XMLHttpRequest()
   xhr.responseType ='json'
   xhr.open(method, url)

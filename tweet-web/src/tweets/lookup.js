@@ -4,7 +4,7 @@ import {backendLookup} from '../lookup'
 export const apiTweetFeed = function (callback, nextUrl) {
     let endpoint = "/tweets/feed/"
     if (nextUrl != null && nextUrl !== undefined) {
-        endpoint = nextUrl.replace("https://tuly-microblog.herokuapp.com/api", "")
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
     }
     
     console.log(endpoint)
@@ -27,7 +27,7 @@ export const apiTweetList = function(username, callback, nextUrl) {
         endpoint = `/tweets/?username=${username}`
     }
     if (nextUrl != null && nextUrl !== undefined) {
-        endpoint = nextUrl.replace("https://tuly-microblog.herokuapp.com/api", "")
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
     }
     backendLookup('GET', endpoint, callback)  
 }
